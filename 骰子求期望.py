@@ -24,3 +24,32 @@ def expection(a):
 
 res, ans = expection([2, 3, 3])
 print(res, ans)
+
+
+
+# 易于理解版版本
+a = [2, 2]
+a.sort()
+def expecation(a):
+    a.sort()
+    maxi = max(a)
+    A = 1
+    for i in range(len(a)):
+        A *= a[i]
+    p = []
+    for i in range(1, maxi + 1):
+        pi = 1/A
+        if i == 1:
+            p.append(pi)
+        else:
+            for j in range(len(a)):
+                if i < a[j]:
+                    pi *= i
+                else:
+                    pi *= a[j]
+            p.append(pi - sum(p[:]))
+    res = 0
+    for i in range(1, maxi + 1):
+        res += i * p[i - 1]
+    return res
+print(expecation(a))

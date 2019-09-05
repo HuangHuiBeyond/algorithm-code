@@ -1,2 +1,2 @@
 # algorithm-code
-algothhm code
+algorithm and code

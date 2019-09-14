@@ -21,11 +21,11 @@ def bag01(weight, values, n):
         return 0
     m = len(weight)
     dp = [[0] * (n + 1) for i in range(m + 1)]  ## 动态规划的常用技巧，长度加1
-    for i in range(1, m + 1):
+    for i in range(1, m + 1): ## i表示物品
         w = weight[i - 1]  ## 用这个技巧的时候，这里要减1
         v = values[i - 1]
         for j in range(1, n + 1):
-            if j >= w:
+            if j >= w: ## j表示背包载重
                 dp[i][j] = max(dp[i-1][j-w] + v, dp[i-1][j])
             else:
                 dp[i][j] = dp[i - 1][j]
@@ -71,6 +71,42 @@ def coinChange(self, coins: List[int], amount: int) -> int:
             if i - coin >= 0:
                 dp[i] =  min(dp[i], dp[i - coin] + 1)
     return dp[-1] if dp[-1] != float('inf') else -1
+
+
+
+
+## 多维背包问题
+## 二个限制对应三维数组
+def bag01_multi_dim(weight, volume, values, total_w, total_vol):
+    if not weight or not volume or not total_w or not total_vol:
+        return 0
+    m = len(weight) ## m表示物品个数
+    # dp = [[0, 0] * (n + 1) for i in range(m+1)]  ## 动态规划的常用技巧，长度加1
+    dp = [[[0]*(total_vol + 1) for _ in range(total_w+1)] for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        w = weight[i - 1]  ## 用这个技巧的时候，这里要减1
+        vol = volume[i - 1]
+        v = values[i - 1]
+        for j in range(1, total_w + 1):
+            for k in range(1, total_vol + 1):
+                if j >= w and k >= vol:
+                    dp[i][j][k] = max(dp[i-1][j-w][k-vol] + v, dp[i-1][j][k])
+                else:
+                    dp[i][j][k] = dp[i - 1][j][k]
+    return dp[m][total_w][total_vol]
+
+## test
+total_disk = 15
+total_memory = 10
+app_list = [[5, 1, 1000], [2,3, 3000], [5, 2,999], [2, 11, 10000]]
+w_disk = []
+w_memory = []
+v = []
+for i in range(len(app_list)):
+    w_disk.append(app_list[i][0])
+    w_memory.append(app_list[i][1])
+    v.append(app_list[i][2])
+print(bag01_multi_dim(w_disk, w_memory, v, total_disk, total_memory))
 
 
 

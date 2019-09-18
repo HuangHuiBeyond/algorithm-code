@@ -234,6 +234,52 @@ def findOrder(numCourses: int, prerequisites: List[List[int]]) -> List[int]:
                 if not indegrees[cur]: queue.append(cur)  ## 检查入度，为0加入队列
         return res if not numCourses else []
 
+## leetcode:269 拓扑排序经典应用：火星文问题
+def alienOrder(words):
+    """
+    :type words: List[str]
+    :rtype: str
+    """
+    if len(words)==0:
+        return ""
+    indegree = {}
+    hash = {}
+    # 声明记录入度的哈希表，并初始化
+    for word in words:
+        for i in word:
+            indegree[i] = 0
+            hash[i] = []
+    # 构建DAG图 
+    for i in range(len(words)-1):
+        k=0
+        while ((k<min(len(words[i]),len(words[i+1]))) and words[i][k]==words[i+1][k]):
+            k+=1
+        if (k>=min(len(words[i]),len(words[i+1]))):
+            continue
+        indegree[words[i+1][k]]+=1
+        hash[words[i][k]].append(words[i+1][k])
+    res = []
+    # 拓扑排序
+    while indegree:  ## 这个while循环一定能弹完所有元素
+        # Q为空，也就是图不是DAG，终止
+        try:
+            Q = list(indegree.keys())[list(indegree.values()).index(0)]  ## 入度为0的点，先选谁并不重要，插在任意一个位置都可以
+        except:
+            return ""
+        # 遍历左右的当前入度为0的字母
+        for i in Q:
+            # 把它所有指向的字母入度-1
+            for j in hash[i]:
+                indegree[j] -= 1
+            # 记录入度的表中弹出入度为0的（老的字母，通过入度-1生成的新入度为0的字母这轮不弹出）
+            indegree.pop(i)
+            # # 邻接表中弹出同样弹出
+            # hash.pop(i)
+            # 添加到结果里
+            res.append(i)
+    return ''.join(res)
+
+
 
 
 
@@ -648,7 +694,21 @@ def TSP(graph_list, start_node):
 print(TSP(graph_list, 2))
 
 
-
+## leetcode:684 并查集
+def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+    parents = list(range(len(edges) + 1))
+    def find_parents(x):
+        if x != parents[x]:
+            parents[x] = find_parents(parents[x]) ## 最终只有一个
+        return parents[x]
+    
+    for node1, node2 in edges:
+        node1_par = find_parents(node1)
+        node2_par = find_parents(node2)
+        if node1_par != node2_par:
+            parents[node2_par] = node1_par
+        else:
+            return [node1, node2]  ## 若有多个答案怎么办，根的选择也很关键啊
 
     
 

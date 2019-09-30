@@ -10,7 +10,7 @@ class Solution:
     # 迭代解法
     def ReverseList(self, pHead):
         # write code here
-        p_reverse_head = ListNode(None)
+        p_reverse_head = None
         cur_node = pHead
         pre_node = None
         while cur_node is not None:
@@ -36,7 +36,7 @@ class Solution:
 
 
 sll = SingleLinkedList()
-sll.add_item_from_arr([1, 2])
+sll.add_item_from_arr([1, 2, 3, 4])
 sol = Solution()
 res = sol.ReverseList(sll.head)
 pass
